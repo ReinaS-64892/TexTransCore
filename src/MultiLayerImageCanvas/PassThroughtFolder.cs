@@ -13,17 +13,19 @@ namespace net.rs64.TexTransCore.MultiLayerImageCanvas
     , ITexTransDriveStorageBufferHolder
     {
         public List<LayerObject<TTCE>> Layers;
+        public AlphaOperation AlphaOperator;
 
-        public PassThoughtFolder(bool visible, AlphaMask<TTCE> alphaModifier, bool preBlendToLayerBelow, List<LayerObject<TTCE>> layers) : base(visible, alphaModifier, preBlendToLayerBelow)
+        public PassThoughtFolder(bool visible, AlphaMask<TTCE> alphaModifier, AlphaOperation alphaOperator, bool preBlendToLayerBelow, List<LayerObject<TTCE>> layers) : base(visible, alphaModifier, preBlendToLayerBelow)
         {
             Layers = layers;
+            AlphaOperator = alphaOperator;
         }
 
         public override void GrabImage(TTCE engine, EvaluateContext<TTCE> evaluateContext, ITTRenderTexture grabTexture)
         {
-            using (var nEvalCtx = EvaluateContext<TTCE>.NestContext(engine, grabTexture.Width, grabTexture.Hight, evaluateContext, AlphaMask, null))
+            using (var nEvalCtx = EvaluateContext<TTCE>.NestContext(engine, grabTexture.Width, grabTexture.Hight, evaluateContext, AlphaMask, null, AlphaOperator))
             {
-                new CanvasContext<TTCE>(engine).EvaluateForFlattened(grabTexture, evaluateContext, CanvasContext<TTCE>.ToBelowFlattened(Layers));
+                new CanvasContext<TTCE>(engine).EvaluateForFlattened(grabTexture, nEvalCtx, CanvasContext<TTCE>.ToBelowFlattened(Layers));
             }
         }
 

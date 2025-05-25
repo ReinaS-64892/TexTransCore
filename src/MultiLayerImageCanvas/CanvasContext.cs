@@ -52,7 +52,8 @@ namespace net.rs64.TexTransCore.MultiLayerImageCanvas
                                 if (nEvalCtx.PreBlends is not null && nEvalCtx.PreBlends.Any() is true)
                                     EvaluateForFlattened(layerRt, null, nEvalCtx.PreBlends.Select(l => new PreBlendPairedLayer(l, null)));
                             }
-                            BlendForAlphaOperation(canvasTex, imageLayer, layerRt);
+
+                            BlendForAlphaOperation(evalCtx, canvasTex, imageLayer, layerRt);
                         }
                         break;
                     case GrabLayer<TTCE> grabLayer:
@@ -67,9 +68,10 @@ namespace net.rs64.TexTransCore.MultiLayerImageCanvas
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly void BlendForAlphaOperation(ITTRenderTexture canvasTexture, ImageLayer<TTCE> imageLayer, ITTRenderTexture layerRt)
+        public readonly void BlendForAlphaOperation(EvaluateContext<TTCE>? evaluateContext, ITTRenderTexture canvasTexture, ImageLayer<TTCE> imageLayer, ITTRenderTexture layerRt)
         {
-            var alphaOperation = imageLayer.AlphaOperation;
+            var overrideAlphaOperation = evaluateContext?.OverrideAlphaOperation;
+            var alphaOperation = overrideAlphaOperation ?? imageLayer.AlphaOperation;
             var blendKey = imageLayer.BlendTypeKey;
             BlendForAlphaOperation(_engine, canvasTexture, layerRt, alphaOperation, blendKey);
         }
@@ -204,15 +206,17 @@ namespace net.rs64.TexTransCore.MultiLayerImageCanvas
     {
         RenderTextureOnlyToMask<TTCE> _alphaMask;
         List<LayerObject<TTCE>>? _preBlends;
-
-        public EvaluateContext(ITTRenderTexture nowAlphaMask, List<LayerObject<TTCE>>? preBlends)
+        AlphaOperation? _overrideAlphaOperation;
+        public AlphaOperation? OverrideAlphaOperation => _overrideAlphaOperation;
+        public EvaluateContext(ITTRenderTexture nowAlphaMask, List<LayerObject<TTCE>>? preBlends, AlphaOperation? overrideAlphaOperation = null)
         {
             _alphaMask = new(nowAlphaMask);
             _preBlends = preBlends;
+            _overrideAlphaOperation = overrideAlphaOperation;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EvaluateContext<TTCE> NestContext(TTCE engine, int width, int height, EvaluateContext<TTCE>? sourceContext, AlphaMask<TTCE> addAlphaMask, List<LayerObject<TTCE>>? addPreBlends)
+        public static EvaluateContext<TTCE> NestContext(TTCE engine, int width, int height, EvaluateContext<TTCE>? sourceContext, AlphaMask<TTCE> addAlphaMask, List<LayerObject<TTCE>>? addPreBlends = null, AlphaOperation? overrideAlphaOperation = null)
         {
             var newMask = engine.CreateRenderTexture(width, height);
             engine.AlphaFill(newMask, 1);
@@ -224,7 +228,7 @@ namespace net.rs64.TexTransCore.MultiLayerImageCanvas
             if (sourceContext?._preBlends is not null && margePreBlends is not null) { margePreBlends.AddRange(sourceContext._preBlends); }
             if (addPreBlends is not null && margePreBlends is not null) { margePreBlends.AddRange(addPreBlends); }
 
-            return new(newMask, margePreBlends);
+            return new(newMask, margePreBlends, overrideAlphaOperation);
         }
 
         public AlphaMask<TTCE> AlphaMask => _alphaMask;
