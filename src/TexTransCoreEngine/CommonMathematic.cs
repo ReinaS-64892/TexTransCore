@@ -126,5 +126,13 @@ namespace net.rs64.TexTransCore
         {
             return Math.Clamp(v, 0f, 1f);
         }
+        public static float Trunc(float v)
+        {
+            return v - Frac(v);
+        }
+        public static float Frac(float v)
+        {
+            return v % 1f;
+        }
     }
 }
