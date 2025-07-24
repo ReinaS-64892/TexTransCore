@@ -6,13 +6,11 @@ namespace net.rs64.TexTransCore.TTMathUtil
 {
     public static class RayIntersect
     {
-        [StructLayout(LayoutKind.Sequential)]
         public struct Ray
         {
             public Vector3 Position;
             public Vector3 Direction;
         }
-        [StructLayout(LayoutKind.Sequential)]
         public readonly struct RayIntersectResult
         {
             public readonly Vector3 TBC;
