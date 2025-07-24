@@ -8,27 +8,27 @@ namespace net.rs64.TexTransCore.UVIsland
     [Serializable]
     public class Island
     {
-        public List<TriangleIndex> Triangles;
+        public List<TriangleVertexIndices> Triangles;
         public IslandTransform Transform = new();
 
         public Island(Island source)
         {
-            Triangles = new List<TriangleIndex>(source.Triangles);
+            Triangles = new List<TriangleVertexIndices>(source.Triangles);
             Transform = source.Transform;
         }
-        public Island(TriangleIndex triangleIndex, IslandTransform? islandTransform = null)
+        public Island(TriangleVertexIndices triangleIndex, IslandTransform? islandTransform = null)
         {
-            Triangles = new List<TriangleIndex> { triangleIndex };
+            Triangles = new List<TriangleVertexIndices> { triangleIndex };
             Transform = islandTransform ?? new();
         }
-        public Island(List<TriangleIndex> trianglesOfIsland, IslandTransform? islandTransform = null)
+        public Island(List<TriangleVertexIndices> trianglesOfIsland, IslandTransform? islandTransform = null)
         {
             Triangles = trianglesOfIsland;
             Transform = islandTransform ?? new();
         }
         public Island()
         {
-            Triangles = new List<TriangleIndex>();
+            Triangles = new List<TriangleVertexIndices>();
         }
     }
     public class IslandTransform

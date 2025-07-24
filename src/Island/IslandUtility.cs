@@ -77,7 +77,7 @@ namespace net.rs64.TexTransCore.UVIsland
             /// </summary>
             /// <param name="idx"></param>
             /// <param name="islandList"></param>
-            public void AddTriangle(TriangleIndex idx, List<Island> islandList)
+            public void AddTriangle(TriangleVertexIndices idx, List<Island> islandList)
             {
                 if (island == null)
                 {
@@ -98,7 +98,7 @@ namespace net.rs64.TexTransCore.UVIsland
         //     return UVtoIsland(meshData.TriangleIndex[subMeshIndex].AsList(), meshData.VertexUV.AsList());
         // }
 
-        public static List<Island> UVtoIsland(ReadOnlySpan<TriangleIndex> triIndexes, ReadOnlySpan<Vector2> vertexUV)
+        public static List<Island> UVtoIsland(ReadOnlySpan<TriangleVertexIndices> triIndexes, ReadOnlySpan<Vector2> vertexUV)
         {
             // Profiler.BeginSample("UVtoIsland");
             var islands = UVToIslandImpl(triIndexes, vertexUV);
@@ -107,7 +107,7 @@ namespace net.rs64.TexTransCore.UVIsland
             return islands;
         }
 
-        private static List<Island> UVToIslandImpl(ReadOnlySpan<TriangleIndex> triIndexes, ReadOnlySpan<Vector2> vertexUV)
+        private static List<Island> UVToIslandImpl(ReadOnlySpan<TriangleVertexIndices> triIndexes, ReadOnlySpan<Vector2> vertexUV)
         {
             int uniqueUv = 0;
             var vertCount = vertexUV.Length;
