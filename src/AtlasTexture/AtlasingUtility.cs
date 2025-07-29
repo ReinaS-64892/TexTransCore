@@ -7,8 +7,6 @@ using net.rs64.TexTransCore.UVIsland;
 
 namespace net.rs64.TexTransCore.AtlasTexture
 {
-
-    [StructLayout(LayoutKind.Sequential, Pack = 4)]
     struct InputRect
     {
         public float SourcePositionX;

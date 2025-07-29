@@ -14,11 +14,11 @@ namespace net.rs64.TexTransCore.TransTexture
             , ITTRenderTexture sourceTex // read only
             , ITTRenderTexture targetTex // write only 内容が書き込まれていた場合の動作は未定義
 
-            , ReadOnlySpan<TriangleIndex> sourceTriangles
+            , ReadOnlySpan<TriangleVertexIndices> sourceTriangles
             , ReadOnlySpan<TTVector4> sourceVertex // w は使用されない aliment の都合
             , ReadOnlySpan<Vector2> sourceUVVertex
 
-            , ReadOnlySpan<TriangleIndex> targetTriangles
+            , ReadOnlySpan<TriangleVertexIndices> targetTriangles
             , ReadOnlySpan<TTVector4> targetVertex
             , ReadOnlySpan<Vector2> targetUVVertex
 
@@ -65,7 +65,7 @@ namespace net.rs64.TexTransCore.TransTexture
             BitConverter.TryWriteBytes(pmGvBuf.Slice(12, 4), 0);
 
             positionMapperHandler.SetStorageBuffer(pmPositionPaddingDistanceMapID, positionPaddingDistanceMapBuffer);
-            using var pmTriBuf = engine.SetStorageBufferFromUpload(positionMapperHandler, pmPolygonIndexID, MemoryMarshal.Cast<TriangleIndex, int>(targetTriangles));
+            using var pmTriBuf = engine.SetStorageBufferFromUpload(positionMapperHandler, pmPolygonIndexID, MemoryMarshal.Cast<TriangleVertexIndices, int>(targetTriangles));
             using var pmVertBuf = engine.SetStorageBufferFromUpload(positionMapperHandler, pmVertexID, targetVertex);
             using var pmUVVertBuf = engine.SetStorageBufferFromUpload(positionMapperHandler, pmUVVertexID, targetUVVertex);
 
@@ -105,7 +105,7 @@ namespace net.rs64.TexTransCore.TransTexture
             nearTransTextureHandler.SetTexture(ntTransMapID, transMap);
             nearTransTextureHandler.SetTexture(ntPolygonToDistanceID, polygonToDistanceMap);
 
-            using var ntTriBuf = engine.SetStorageBufferFromUpload(nearTransTextureHandler, ntPolygonIndexID, MemoryMarshal.Cast<TriangleIndex, int>(sourceTriangles));
+            using var ntTriBuf = engine.SetStorageBufferFromUpload(nearTransTextureHandler, ntPolygonIndexID, MemoryMarshal.Cast<TriangleVertexIndices, int>(sourceTriangles));
             using var ntVertBuf = engine.SetStorageBufferFromUpload(nearTransTextureHandler, ntVertexID, sourceVertex);
             using var ntUVVertBuf = engine.SetStorageBufferFromUpload(nearTransTextureHandler, ntUVVertexID, sourceUVVertex);
 

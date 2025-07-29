@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 
 namespace net.rs64.TexTransCore
 {
-    [StructLayout(LayoutKind.Sequential)]
     public struct ColorWOAlpha
     {
         public float R;
@@ -16,7 +15,6 @@ namespace net.rs64.TexTransCore
     /// <summary>
     /// ガンマ色空間の色を表現する
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
     public struct Color
     {
         public float R;
@@ -44,7 +42,6 @@ namespace net.rs64.TexTransCore
     /// <summary>
     /// System.Numeric の Vector4 は W が先頭にあるためそれを回避するための存在
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
     public struct TTVector4
     {
         public float X;
