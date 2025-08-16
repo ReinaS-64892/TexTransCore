@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -11,6 +12,12 @@ namespace net.rs64.TexTransCore
         public float G;
         public float B;
         public float[] ToArray() { return new float[] { R, G, B }; }
+        public ColorWOAlpha(float r, float g, float b)
+        {
+            R = r;
+            G = g;
+            B = b;
+        }
     }
     /// <summary>
     /// ガンマ色空間の色を表現する
@@ -130,6 +137,42 @@ namespace net.rs64.TexTransCore
         public static float Frac(float v)
         {
             return v % 1f;
+        }
+
+        public static float Lerp(float l, float r, float v)
+        {
+            return l + (r - l) * v;
+        }
+        public static float NotNaN(float v, float replace = 0f)
+        {
+            return float.IsNaN(v) is false ? v : replace;
+        }
+        public static ColorWOAlpha GammaToLinear(ColorWOAlpha color)
+        {
+            color.R = GammaToLinear(color.R);
+            color.G = GammaToLinear(color.G);
+            color.B = GammaToLinear(color.B);
+            return color;
+        }
+
+        public static ColorWOAlpha LinearToGamma(ColorWOAlpha color)
+        {
+            color.R = LinearToGamma(color.R);
+            color.G = LinearToGamma(color.G);
+            color.B = LinearToGamma(color.B);
+            return color;
+        }
+    }
+
+    public static class TTEnumerable // TODO : もう少しいい感じのファイルに移したいよね
+    {
+        public static T? FirstOrValueNull<T>(this IEnumerable<T> values, Func<T, bool> comp)
+        where T : struct
+        {
+            foreach (var v in values)
+                if (comp(v)) { return v; }
+
+            return null;
         }
     }
 }
