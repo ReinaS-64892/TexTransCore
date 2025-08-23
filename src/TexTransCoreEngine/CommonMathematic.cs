@@ -147,6 +147,10 @@ namespace net.rs64.TexTransCore
         {
             return float.IsNaN(v) is false ? v : replace;
         }
+        public static float Finite(float v, float replace = 0f)
+        {
+            return float.IsFinite(v) ? v : replace;
+        }
         public static ColorWOAlpha GammaToLinear(ColorWOAlpha color)
         {
             color.R = GammaToLinear(color.R);
