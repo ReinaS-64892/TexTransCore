@@ -10,7 +10,12 @@
 
 
   <ItemGroup>
-    <Compile Include="../../src/**/*.cs"/>
+    <Compile Include="../../src/**/*.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
   </ItemGroup>
 
 </Project>
