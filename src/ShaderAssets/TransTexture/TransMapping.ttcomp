@@ -79,7 +79,7 @@ float4 MinMax(float2 tri[3])
 
     float4 rect = MinMax(toPolygon);
     int2 minVal = max( int2(floor(rect.xy)), int2(0,0));
-    int2 maxVal = min( int2(ceil(rect.zw)), TransTargetMapSize);
+    int2 maxVal = rect.zw;
 
     int ySize = maxVal.y - minVal.y;
     for (int yID = thisID; ySize > yID; yID += idMax)
@@ -88,7 +88,7 @@ float4 MinMax(float2 tri[3])
         for (int x = minVal.x; maxVal.x > x; x += 1)
         {
             float2 pos = float2(x + 0.5, y + 0.5);
-            int2 posIndex = int2(x, y);
+            int2 posIndex = int2(x % TransTargetMapSize.x, y % TransTargetMapSize.y);
 
             float fromArea = abs( TriangleArea(fromPolygon) / 2 );
             float toArea = abs( TriangleArea(toPolygon) / 2 );
