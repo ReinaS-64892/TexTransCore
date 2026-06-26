@@ -1,0 +1,22 @@
+/*
+BEGIN__TT_COMPUTE_SHADER_HEADER
+
+Language HLSL
+LanguageVersion 2018
+
+TTComputeType GrabBlend
+
+END__TT_COMPUTE_SHADER_HEADER
+*/
+
+RWTexture2D<float4> Tex;
+
+[numthreads(32, 32, 1)] void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    float4 col = Tex[id.xy];
+
+    float3 OneCol = float3(1, 1, 1);
+    float3 resultCol = OneCol - (OneCol - col.rgb) * col.aaa;
+
+    Tex[id.xy] = float4(resultCol, col.a);
+}
